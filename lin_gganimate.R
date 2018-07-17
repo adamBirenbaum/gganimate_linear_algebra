@@ -155,7 +155,28 @@ server <- function(input,output){
   #   ease_aes('linear')
   # animate(g,nframes = 400, fps = 100)
   # 
-
+  get_vertical_line <- function(slope,shift,global_limit,state){
+    nsize <- 100
+    if (slope == 0){
+      ylim1 <- -global_limit
+      ylim2 <- global_limit
+      
+      df <-  data.frame(x = seq(from  = ylim1, to = ylim2, length.out = nsize)) %>% mutate(y = shift,
+                                                                                           state = state)
+    }else if (is.infinite(slope)){
+      df <-  data.frame(x = rep(shift,nsize), y = seq(from = -global_limit, to = global_limit, length.out = nsize),
+                        state = state)
+      
+    }else{
+      ylim1 <- shift + global_limit / slope
+      ylim2 <- shift - global_limit / slope
+      df <- data.frame(x = seq(from  = ylim1, to = ylim2, length.out = nsize)) %>% mutate(y = slope *(x - shift),
+                                                                                          state = state)
+    }
+    
+    df
+    
+  }
   
   transform_grid <- function(nstates){
     A = matrix(c(1,1,-2,1),nrow = 2)
@@ -205,12 +226,11 @@ server <- function(input,output){
           panel.grid = element_blank()),xlab(""),ylab(""),guides(color = F))
   }
   
-  A <- matrix(c(3,-2,2,1),nrow = 2)
+  A <- matrix(c(3,2,2,1),nrow = 2)
   
-  shift_vec <- seq(from = -5,to = 5, length.out = 5)
-  
+
   make_grid_df <- function(A){
-    integer_factor <- -20:20
+    integer_factor <- -50:50
     nn <- length(integer_factor)
     
     slope_v1 <- A[2,1] / A[1,1]
@@ -239,7 +259,7 @@ server <- function(input,output){
       ease_aes("linear")
     
     
-    animate(g,nframes = 100, fps = 25,length = 3)
+    animate(g,nframes = 100, fps = 25)
     
   }
 
