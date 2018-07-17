@@ -15,7 +15,7 @@ server <- function(input,output){
   custom_pallette <- paletteer_d("LaCroixColoR","PassionFruit")
 
   
-  output$plot1 <- renderImage({list(src = "~/Desktop/original.gif",contentType = 'image/gif')},deleteFile = F)
+  output$plot1 <- renderImage({list(src = "~/gganimate_linear_algebra/original.gif",contentType = 'image/gif')},deleteFile = F)
   observeEvent(input$enter,{
     
     
@@ -24,33 +24,33 @@ server <- function(input,output){
       b <- matrix(c(0,as.numeric(input$b)),nrow = 2)
       df <- add_vectors(a,b)
       text_df <- get_text_df(df)
-      browser()
+
       df2 <- transform_grid(4)
-     df3 <- data.frame(intercept = -5:5,state = 1)
+     #df3 <- data.frame(intercept = -5:5,state = 1)
+    
       
-    browser()
       
-      
-      g <- ggplot(df, aes(x = x, y = y, xend = xend, yend = yend,color = factor(color))) + 
- geom_segment(arrow = arrow(type = "closed"),size = 3)+ geom_text(data = text_df,aes(x = xx, y = yy, label = paste0("hat(",id,")")),color = "white",parse = T,size = 14) +geom_abline(mapping = aes(slope = slope, intercept = intercept),data = df2,size = 3, color = "white")+
-            scale_color_manual(breaks = 1:3,values = c("#FC6882","#A6E000")) + add_custom_theme() + 
-                 transition_states(state,transition_length = 10,state_length = 1,wrap = F) +
-               ease_aes('linear') +xlim(-2,2) + ylim(-2,2)#+ adjust_grid_limits(df,make_square = T)
-      
-      # g <- ggplot(df, aes(x = x, y = y, xend = xend, yend = yend,color = factor(color))) + original_grid(df,by_ones = T,make_square = T) + 
-      #   geom_segment(arrow = arrow(type = "closed"),size = 3)+ geom_text(data = text_df,aes(x = xx, y = yy, label = paste0("hat(",id,")")),color = "white",parse = T,size = 14) +geom_abline(mapping = aes(slope = slope, intercept = intercept),data = df2,size = 3, color = "white")+
-      #   scale_color_manual(breaks = 1:3,values = c("#FC6882","#A6E000")) + add_custom_theme() + 
-      #   transition_states(state,transition_length = 10,state_length = 1,wrap = F) +
-      #   ease_aes('linear') + adjust_grid_limits(df,make_square = T)
-      # 
+ #      g <- ggplot(df, aes(x = x, y = y, xend = xend, yend = yend,color = factor(color))) + 
+ # geom_segment(arrow = arrow(type = "closed"),size = 3)+ geom_text(data = text_df,aes(x = xx, y = yy, label = paste0("hat(",id,")")),color = "white",parse = T,size = 14) +geom_abline(mapping = aes(slope = slope, intercept = intercept),data = df2,size = 3, color = "white")+
+ #            scale_color_manual(breaks = 1:3,values = c("#FC6882","#A6E000")) + add_custom_theme() + 
+ #                 transition_states(state,transition_length = 10,state_length = 1,wrap = F) +
+ #               ease_aes('linear') +xlim(-2,2) + ylim(-2,2)#+ adjust_grid_limits(df,make_square = T)
+ #      
+      g <- ggplot(df, aes(x = x, y = y, xend = xend, yend = yend,color = factor(color))) + original_grid(df,by_ones = T,make_square = T) +geom_abline(mapping = aes(slope = slope, intercept = intercept),data = df2,size = 3, color = "white")+
+                    scale_color_manual(breaks = 1:3,values = c("#FC6882","#A6E000")) + add_custom_theme() + 
+        geom_segment(arrow = arrow(type = "closed"),size = 3)+ geom_text(data = text_df,aes(x = xx, y = yy, label = paste0("hat(",id,")")),color = "white",parse = T,size = 14) +
+        scale_color_manual(breaks = 1:3,values = c("#FC6882","#A6E000")) + add_custom_theme() +
+        transition_states(state,transition_length = 10,state_length = 1,wrap = F) +
+        ease_aes('linear') + adjust_grid_limits(df,make_square = T)
+
  
       
-      gg <- animate(g, nframes = 50, fps = 10)
+      gg <- animate(g, nframes = 60, fps = 10)
     
 
 
-      image_write(gg,"~/Desktop/testing.gif")
-      output$plot1 <- renderImage(list(src = "~/Desktop/testing.gif",contentType = 'image/gif'))
+      image_write(gg,"~/gganimate_linear_algebra/testing.gif")
+      output$plot1 <- renderImage(list(src = "~/gganimate_linear_algebra/testing.gif",contentType = 'image/gif'))
 
     })
     
@@ -128,16 +128,16 @@ server <- function(input,output){
     }
   }
   
-  # For making the vertical grid lines
-  # 
-  # d <- expand.grid(1:5,-5:5,5)
+
+
+  # d <- expand.grid(1:5,-10:10,5)
   # names(d) <- c("slope","shift","global_limit")
   # 
   # get_vertical_line <- function(slope,shift,global_limit){
-  #   
-  #   ylim1 <- shift + global_limit / slope 
-  #   ylim2 <- shift - global_limit / slope 
-  #   data.frame(x = seq(from  = ylim1, to = ylim2, length.out = 200)) %>% mutate(y = slope *(x - shift))
+  # 
+  #   ylim1 <- shift + global_limit / slope
+  #   ylim2 <- shift - global_limit / slope
+  #   data.frame(x = seq(from  = ylim1, to = ylim2, length.out = 20)) %>% mutate(y = slope *(x - shift))
   # }
   # 
   # ggplot(get_vertical_line(1000,-1,5),aes(x = x, y =y )) + geom_line() + coord_cartesian(xlim = c(-5,5),ylim = c(-5,5), expand = F)
@@ -146,16 +146,16 @@ server <- function(input,output){
   # 
   # all_lines <- mapply(get_vertical_line,slope =d$slope,shift = d$shift, global_limit = d$global_limit,SIMPLIFY = F)
   # all_lines <- do.call(rbind,all_lines)
-  # all_lines$state <- rep(rep(1:5,each = 200),times = 11)
-  # all_lines$group <- rep(1:11,each = 200)
+  # all_lines$state <- rep(rep(1:5,each = 20),times = 21)
+  # all_lines$group <- rep(1:21,each = 20)
   # 
-  # g <- ggplot() + 
+  # g <- ggplot() +
   #   geom_line(data = all_lines, aes(x = x, y = y,group = group)) + coord_cartesian(xlim = c(-5,5),ylim=c(-5,5),expand = F) +
-  #   transition_states(state,transition_length = 10,state_length = 1,wrap = F) +
+  #   transition_states(state,transition_length = 1000,state_length = 1,wrap = F) +
   #   ease_aes('linear')
-  # animate(g,nframes = 100, fps = 20)
+  # animate(g,nframes = 400, fps = 100)
   # 
-  # 
+
   
   transform_grid <- function(nstates){
     A = matrix(c(1,1,-2,1),nrow = 2)
@@ -166,7 +166,7 @@ server <- function(input,output){
       slope2 <- A[2,2] / A[1,2]
       slope1_seq <- seq(from = 0, to = slope1, length.out = nstates)
       #slope2_seq <- seq(from = 10, to = slope2, length.out = nstates)
-      slope2 <- (seq(from = (10)^(1/9), to = sign(slope2)*(abs(slope2))^(1/9), length.out = nstates))^(9)
+      slope2_seq <- (seq(from = (10)^(1/9), to = sign(slope2)*(abs(slope2))^(1/9), length.out = nstates))^(9)
       
       int_seq <- seq(from = -5, to = 5, length.out = 5)
       xdf <- expand.grid(slope1_seq,int_seq)
@@ -205,7 +205,43 @@ server <- function(input,output){
           panel.grid = element_blank()),xlab(""),ylab(""),guides(color = F))
   }
   
+  A <- matrix(c(3,-2,2,1),nrow = 2)
   
+  shift_vec <- seq(from = -5,to = 5, length.out = 5)
+  
+  make_grid_df <- function(A){
+    integer_factor <- -20:20
+    nn <- length(integer_factor)
+    
+    slope_v1 <- A[2,1] / A[1,1]
+    slope_v2 <- A[2,2] / A[1,2]
+    
+    v1_df <- do.call(rbind,lapply(integer_factor * A[1,1],FUN = get_vertical_line,slope = slope_v2,global_limit = 5,state = 2))
+    v1_df$group <- rep(1:nn,each = 100)
+    v2_df <- do.call(rbind,lapply(integer_factor * A[2,2],FUN = get_vertical_line,slope = slope_v1,global_limit = 5,state = 2))
+    v2_df$group <- rep(c(nn+1):(nn*2),each = 100)
+    
+    A0 <- matrix(c(1,0,0,1),nrow = 2)
+    slope_v1 <- A0[2,1] / A0[1,1]
+    slope_v2 <- A0[2,2] / A0[1,2]
+    v01_df <-  do.call(rbind,lapply(integer_factor * A0[1,1],FUN = get_vertical_line,slope = slope_v2,global_limit = 5,state = 1))
+    v01_df$group <- rep(1:nn,each = 100)
+    v02_df <-  do.call(rbind,lapply(integer_factor * A0[2,2],FUN = get_vertical_line,slope = slope_v1,global_limit = 5,state = 1))
+    v02_df$group <- rep(c(nn+1):(nn*2),each = 100)
+    
+    
+    dd <- rbind(v01_df,v02_df,v1_df,v2_df)
+    
+    g <- ggplot(dd,aes(x = x,y = y, group = group + 3)) + geom_line(color = "#FC6882",size = 2) + coord_cartesian(xlim = c(-5,5),ylim=c(-5,5),expand = F)+
+      add_custom_theme()+theme(axis.text = element_blank(),
+                               plot.margin = margin(0,0,0,0,"null"))+
+      transition_states(state,transition_length = 100,state_length = 1,wrap = F)+
+      ease_aes("linear")
+    
+    
+    animate(g,nframes = 100, fps = 25,length = 3)
+    
+  }
 
 }
 
