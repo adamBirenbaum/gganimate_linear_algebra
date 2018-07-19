@@ -6,6 +6,10 @@ library(gganimate)
 library(magick)
 
 
+path_to_gifs <- ifelse(Sys.info()['nodename'] =="adamubuntu", "~/gganimate_linear_algebra/gifs/", "/var/www/adambirenbaum.com/public/project/linear-algebra-tutorial/gifs/")
+
+
+
 header <- dashboardHeader(title = "Linear Algebgra Tutorial")
 
 sidebar <- dashboardSidebar(

@@ -178,7 +178,7 @@ server <- function(input, output) {
   observeEvent(input$tabs,{
     if (isolate(input$tabs) == "vector_basic"){
       
-      output$vector_basic_gif <- renderImage({list(src = "~/gganimate_linear_algebra/gifs/vector_basic.gif",contentType = 'image/gif')},deleteFile = F)
+      output$vector_basic_gif <- renderImage({list(src = paste0(path_to_gifs,"vector_basic.gif"),contentType = 'image/gif')},deleteFile = F)
     }
     
   })
@@ -216,8 +216,8 @@ server <- function(input, output) {
         ease_aes('linear') + adjust_grid_limits(combined_anim ,make_square = T) + add_custom_theme() 
       
       gg <- animate(g,nframes = 50, fps = 10)
-      image_write(gg,"~/gganimate_linear_algebra/gifs/vector_basic_temp.gif")
-      output$vector_basic_gif <- renderImage(list(src = "~/gganimate_linear_algebra/gifs/vector_basic_temp.gif",contentType = 'image/gif'),deleteFile = T)
+      image_write(gg,paste0(path_to_gifs,"vector_basic_temp.gif"))
+      output$vector_basic_gif <- renderImage(list(src = paste0(path_to_gifs,"vector_basic_temp.gif"),contentType = 'image/gif'),deleteFile = T)
       
       
 
