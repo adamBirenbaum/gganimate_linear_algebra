@@ -2,6 +2,8 @@ library(shiny)
 library(plotly)
 library(ggplot2)
 library(shinydashboard)
+library(gganimate)
+library(magick)
 
 
 header <- dashboardHeader(title = "Linear Algebgra Tutorial")
@@ -41,7 +43,7 @@ body <- dashboardBody(
                                   textInput("vector_basic_v2","",value = 2)
                            ),
                            uiOutput("vector_basic_math_vector_text")
-                           
+
                )
                
         )
@@ -57,8 +59,7 @@ body <- dashboardBody(
         column(width = 2,
                actionButton("vector_basic_plot_button","Animate")),
         column(width = 12,
-               plotlyOutput("vector_basic_plot")
-               
+                 imageOutput("vector_basic_gif")
         )
       )
       
